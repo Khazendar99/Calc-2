@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="calc">
+      <input id="display" readonly type="text" />
+      <div class="buttons">
+        <button class="number">7</button>
+        <button class="number">9</button>
+        <button class="number">8</button>
+        <button class="operator">/</button>
+        <button class="number">4</button>
+        <button class="number">5</button>
+        <button class="number">6</button>
+        <button class="operator">*</button>
+        <button class="number">1</button>
+        <button class="number">2</button>
+        <button class="number">3</button>
+        <button class="operator">-</button>
+        <button class="number">0</button>
+        <button id="clearButton">C</button>
+        <button class="operator">+</button>
+        <button id="equal">=</button>
+      </div>
+    </div>
+    <script>
+      let numberButtons = document.querySelectorAll(".number");
+      let operatorButtons = document.querySelectorAll(".operator");
+      let clearButton = document.querySelector("#clearButton");
+      let equalButton = document.querySelector("#equal");
+      let display = document.querySelector("#display");
+
+      let firstNumber = null;
+      let secondNumber = null;
+      let operator = null;
+      let sum = null;
+      let step = 0;
+
+      clearButton.addEventListener("click", () => {
+        firstNumber = null;
+        secondNumber = null;
+        operator = null;
+        step = 0;
+        sum = null;
+        display.value = "";
+      });
+      numberButtons.forEach((button) =>
+        button.addEventListener("click", () => {
+          if (step == 0) {
+            display.value += button.innerText;
+          }
+          if (step == 1) {
+            display.value = "";
+            step = 2;
+          }
+          if (step == 2) {
+            display.value += button.innerText;
+            secondNumber = parseFloat(display.value);
+            // console.log(secondNumber);
+          }
+        })
+      );
+      operatorButtons.forEach((button) =>
+        button.addEventListener("click", () => {
+          if (display.value != "" && step == 0) {
+            step = 1;
+            firstNumber = parseFloat(display.value);
+          }
+          if (step == 1) {
+            display.value = button.innerText;
+            operator = display.value;
+            // console.log(firstNumber);
+            // console.log(operator);
+          }
+        })
+      );
+      equalButton.addEventListener("click", () => {
+        if (firstNumber != null && operator != null && secondNumber != null) {
+          function calculate(firstNumber, secondNumber, operator) {
+            switch (operator) {
+              case "+":
+                sum = firstNumber + secondNumber;
+                display.value = sum;
+                break;
+              case "-":
+                sum = firstNumber - secondNumber;
+                display.value = sum;
+                break;
+              case "*":
+                sum = firstNumber * secondNumber;
+                display.value = sum;
+                break;
+              case "/":
+                sum = firstNumber / secondNumber;
+                display.value = sum;
+                break;
+              default:
+                display.value = "Error";
+            }
+          }
+          calculate(firstNumber, secondNumber, operator);
+          firstNumber = sum;
+          step = 0;
+        }
+      });
+    </script>
+  </body>
+</html>
